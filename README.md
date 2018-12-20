@@ -20,7 +20,7 @@
 |--- readme.md
 ```
 ###	简介
-*	特征工程使用六个特征，分别是PclassDf,ParchDf,SibSpDf,FareDf, df.Sex, cabinDf, EmbarkedDf
+*	特征工程使用六个特征，分别是Pclass,Parch,SibSp,Fare, Sex, cabin, Embarked
 
 *	模型使用了LogisticRegression和SVM,准确率分别是74.162%和76.55%
 
