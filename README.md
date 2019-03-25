@@ -30,8 +30,4 @@
 *	Parch和SibSp合并作为一个新特征FamilySize
 *	Age的划分有所改变，分为四个年龄段
 *	增加了新特征Name
-*	多尝试了几种模型，都是直接用sickit-learn调用，GradientBoosting在kaggle上准确率到了80.382%
-
-### 参考资料
-
-*	https://www.jianshu.com/p/2d15400671f2  
+*	多尝试了几种模型，都是直接用sickit-learn调用，GradientBoosting在kaggle上准确率到了80.382% 
