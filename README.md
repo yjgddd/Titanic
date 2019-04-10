@@ -211,7 +211,7 @@ Pclass 为 1、2、3 类，使用 one-hot 编码
 ## 特征工程
 最终保留特征： 
 
-PclassDf,ParchDf,SibSpDf,FareDf, df.Sex, cabinDf, EmbarkedDf 
+Pclass,Parch,SibSp,Fare, Sex, Embarked
 
 ## 模型运用
 ## 项目总结
