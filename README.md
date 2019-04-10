@@ -211,9 +211,10 @@ Pclass 为 1、2、3 类，使用 one-hot 编码
 ## 特征工程
 最终保留特征： 
 
-Pclass,Parch,SibSp,Fare, Sex, Embarked
+Pclass,FamilySize,Fare, Sex, Embarked、Name
 
 ## 模型运用
+逻辑回归、GBDT、KNN、随机森林等
 ## 项目总结
 ## 完整代码
 ## 参考链接
