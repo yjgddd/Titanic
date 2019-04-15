@@ -157,6 +157,26 @@ df.info()
 
 数值类型可以直接使用，分类类型用数值代替类别（one-hot 编码），同时由于数据量较小，一些明显无关的特征可以删除，防止过拟合。 
 
+画出部分柱状图、便于进行特征选择：
+
+```python
+def feature_plot(df, features, hue):
+    f, ax = plt.subplots(len(features),figsize = [5,16])
+    for i,x in enumerate(features):
+       sns.countplot(x=x,hue=hue,data=train,ax=ax[i])
+    plt.tight_layout(pad=0)
+```
+```python
+feature_plot(df=df,features=['Embarked','Parch','SibSp','Pclass','Sex'],hue = "Survived")
+```
+
+![6.png](https://i.loli.net/2019/04/15/5cb45b21c0358.png)
+![7.png](https://i.loli.net/2019/04/15/5cb45b21e6943.png)
+![5.png](https://i.loli.net/2019/04/15/5cb45b21b3788.png)
+![8.png](https://i.loli.net/2019/04/15/5cb45b2221146.png)
+![9.png](https://i.loli.net/2019/04/15/5cb45b222129f.png)
+## 特征工程
+
 ### Age 
 
 由于 Age 是连续性变量，不好观察特征，按照国际的标准将年龄划分为4 类，0-14 岁为 child，15-24 岁为 youth，25-64 为 adult，大于 64 岁为 old，可以看到明显老人和小孩存活下来的可能性更大。Age 特征明显影响存活率，要保留该项特征。 
