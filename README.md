@@ -146,18 +146,8 @@ df.info()
 		    dtypes: float64(3), int64(4), object(5)
 		    memory usage: 132.9+ KB
 ## 数据分析
-
-特征分析，共 11 个特征： 
-
-数值类型：Age、Fare、SibSp、Parch、PassergerID
-
-分类类型：Pclass、Sex、Embarked
-
-字符串类型：Name、Cabin、Ticket 
-
-数值类型可以直接使用，分类类型用数值代替类别（one-hot 编码），同时由于数据量较小，一些明显无关的特征可以删除，防止过拟合。 
-
-画出部分柱状图、便于进行特征选择：
+对于分类数据和是否存活的关系作出柱状图。
+柱状图可以写一个函数调用。
 
 ```python
 def feature_plot(df, features, hue):
@@ -169,72 +159,103 @@ def feature_plot(df, features, hue):
 ```python
 feature_plot(df=df,features=['Embarked','Parch','SibSp','Pclass','Sex'],hue = "Survived")
 ```
+对每个特征进行必要的分析，观察其和存活是否有关系：
 
-![6.png](https://i.loli.net/2019/04/15/5cb45b21c0358.png)
-![7.png](https://i.loli.net/2019/04/15/5cb45b21e6943.png)
-![5.png](https://i.loli.net/2019/04/15/5cb45b21b3788.png)
-![8.png](https://i.loli.net/2019/04/15/5cb45b2221146.png)
-![9.png](https://i.loli.net/2019/04/15/5cb45b222129f.png)
-## 特征工程
+1、	Age 
 
-### Age 
+```python
+age = sns.FacetGrid(train, hue="Survived",aspect=2)
+age.map(sns.kdeplot,'Age',shade= True)
+age.set(xlim=(0, train['Age'].max()))
+age.add_legend()
+```
+![10.png](https://i.loli.net/2019/04/16/5cb586b94b20a.png)
 
-由于 Age 是连续性变量，不好观察特征，按照国际的标准将年龄划分为4 类，0-14 岁为 child，15-24 岁为 youth，25-64 为 adult，大于 64 岁为 old，可以看到明显老人和小孩存活下来的可能性更大。Age 特征明显影响存活率，要保留该项特征。 
-  分类，进行 one-hot 编码： 
-  
+看到明显小孩和年轻人存活下来的可能性更大，特征明显影响存活率，要保留该项特征。 
  
-### Cabin 
+2、	Cabin 
 
 Cablin 数据有很多缺失值，删除该特征
 
   
-### Embarked 
+3、	Embarked 
 
-Embarked 共有三类，分别是S、C、Q,存活的情况有一定差别，C 港口的生存概率大一些，此特征保留。 使用 One-hot编码。
+Embarked 共有三类，分别是S、C、Q,存活的情况有一定差别，C 港口的生存概率大一些，此特征保留。
+![7.png](https://i.loli.net/2019/04/15/5cb45b21e6943.png)
+
   
   
-### Fare 
+4、	Fare 
 
-Fare 是船票的价格，在小于 2.5 和大于 2.5时候存活率有明显的差异，One-hot 编码 
+Fare 是船票的价格，当价格超过一定值的时候，船票价值高的存活率要更高，此特征保留。
+![11.png](https://i.loli.net/2019/04/16/5cb587dba28da.png)
  
-### Name 
+5、	Name 
 
 Name 中可能包含一些重要的信息，比如人的称呼、头衔。对此特征进行处理，提取出新的有用特征。
 
-### Parch 
+```python
+df['Title'] = df['Name'].apply(lambda x:x.split(',')[1].split('.')[0].strip())
+Title_Dict = {}
+Title_Dict.update(dict.fromkeys(['Capt', 'Col', 'Major', 'Dr', 'Rev'], 'Officer'))
+Title_Dict.update(dict.fromkeys(['Don', 'Sir', 'the Countess', 'Dona', 'Lady'], 'Royalty'))
+Title_Dict.update(dict.fromkeys(['Mme', 'Ms', 'Mrs'], 'Mrs'))
+Title_Dict.update(dict.fromkeys(['Mlle', 'Miss'], 'Miss'))
+Title_Dict.update(dict.fromkeys(['Mr'], 'Mr'))
+Title_Dict.update(dict.fromkeys(['Master','Jonkheer'], 'Master'))
+df['Title'] = df['Title'].map(Title_Dict)
+sns.countplot(data=df,x='Title',hue='Survived')
+```
+![12.png](https://i.loli.net/2019/04/16/5cb58b8ebdb20.png)
+称谓一定程度影响了存活率，比如称谓为Mr的存活率很低。保留此特征。
+
+6、	Parch 
+
 Parch 表示父母/子女数目，可以看到有父母/子女陪同的，比单独出行的生存率高，此特征也需要保留。
-  分为三个类别：Parch 为 0、Parch 为 1 到 4、Parch大于 4，进行 one-hot 编码 
+![6.png](https://i.loli.net/2019/04/15/5cb45b21c0358.png)
+
  
-### PassengerID 
+7、	PassengerID 
 乘客的 ID，ID 是无关信息，删除。 
 
-### Pclass 
+8、	Pclass 
 可以看到社会等级高的阶层存活概率显然更大，此特征对生存概率有很大影响，需要保留。 
-  
-Pclass 为 1、2、3 类，使用 one-hot 编码 
+![8.png](https://i.loli.net/2019/04/15/5cb45b2221146.png)
   
 
-### Sex 
+9、	Sex 
 女性的存活概率更大，性别特征对生存率有影响，此项特征保留。 
+![9.png](https://i.loli.net/2019/04/15/5cb45b222129f.png)
   
-由于 Sex 是分类数据，用数值代替类别，1 代表 male，0 代表 female,进行编码 
   
-  
-### SibSp 
-和 Parch 类似，分为三类进行 One-hot 编码 
+10、SibSp
+![13.png](https://i.loli.net/2019/04/16/5cb5ab9f54f4d.png)
+SibSp表示兄弟姐妹的数量，有至少一个兄弟姐妹陪同的存活概率更高。
   
  
-### Ticket 
+11、	Ticket 
 船票号码，无关特征，删除。 
 
+12、增加新特征
+增加新特征FamilySize=Parch+SibSp+1
+观察和存活率的关系。
+![14.png](https://i.loli.net/2019/04/16/5cb5adba6c0a8.png)
+FamilySize>1的更可能存活，将其作为新特征。
 
 ## 特征工程
+由于 Age 是连续性变量，不好观察特征，将年龄划分为4 类，0-14 岁为 child，15-24 岁为 youth，25-64 为 adult，大于 64 岁为 old，分类，进行 one-hot 编码。
+
+Parch和SibSp结合为新特征FamilySize，划分为三个类别1,1-4和大于4
+ 
+Pclass 为 1、2、3 类，Embarked有三类，分别为S、C、Q，均使用 one-hot 编码。
+ 
+Sex，1 代表 male，0 代表 female,进行one-hot编码。
+
+
+Fare根据划分Fare<=2.5和Fare>2.5.进行one-hot编码。
+
+Name根据已经划分的类别进行one-hot编码
+
 最终保留特征： 
 
-Pclass,FamilySize,Fare, Sex, Embarked、Name
-
-## 模型运用
-逻辑回归、GBDT、KNN、随机森林等
-## 项目总结
-## 完整代码
-## 参考链接
+Pclass,Fare,Age,Name,Sex,Embarked,FamilySize并且都转换为分类数据进行one-hot编码。
