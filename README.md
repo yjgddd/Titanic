@@ -181,6 +181,7 @@ Cablin 数据有很多缺失值，删除该特征
 3、	Embarked 
 
 Embarked 共有三类，分别是S、C、Q,存活的情况有一定差别，C 港口的生存概率大一些，此特征保留。
+
 ![7.png](https://i.loli.net/2019/04/15/5cb45b21e6943.png)
 
   
@@ -188,6 +189,7 @@ Embarked 共有三类，分别是S、C、Q,存活的情况有一定差别，C �
 4、	Fare 
 
 Fare 是船票的价格，当价格超过一定值的时候，船票价值高的存活率要更高，此特征保留。
+
 ![11.png](https://i.loli.net/2019/04/16/5cb587dba28da.png)
  
 5、	Name 
@@ -207,11 +209,13 @@ df['Title'] = df['Title'].map(Title_Dict)
 sns.countplot(data=df,x='Title',hue='Survived')
 ```
 ![12.png](https://i.loli.net/2019/04/16/5cb58b8ebdb20.png)
+
 称谓一定程度影响了存活率，比如称谓为Mr的存活率很低。保留此特征。
 
 6、	Parch 
 
 Parch 表示父母/子女数目，可以看到有父母/子女陪同的，比单独出行的生存率高，此特征也需要保留。
+
 ![6.png](https://i.loli.net/2019/04/15/5cb45b21c0358.png)
 
  
@@ -220,16 +224,19 @@ Parch 表示父母/子女数目，可以看到有父母/子女陪同的，比单
 
 8、	Pclass 
 可以看到社会等级高的阶层存活概率显然更大，此特征对生存概率有很大影响，需要保留。 
+
 ![8.png](https://i.loli.net/2019/04/15/5cb45b2221146.png)
   
 
 9、	Sex 
 女性的存活概率更大，性别特征对生存率有影响，此项特征保留。 
+
 ![9.png](https://i.loli.net/2019/04/15/5cb45b222129f.png)
   
   
 10、SibSp
 ![13.png](https://i.loli.net/2019/04/16/5cb5ab9f54f4d.png)
+
 SibSp表示兄弟姐妹的数量，有至少一个兄弟姐妹陪同的存活概率更高。
   
  
@@ -237,9 +244,10 @@ SibSp表示兄弟姐妹的数量，有至少一个兄弟姐妹陪同的存活概
 船票号码，无关特征，删除。 
 
 12、增加新特征
-增加新特征FamilySize=Parch+SibSp+1
-观察和存活率的关系。
+增加新特征FamilySize=Parch+SibSp+1,观察和存活率的关系。
+
 ![14.png](https://i.loli.net/2019/04/16/5cb5adba6c0a8.png)
+
 FamilySize>1的更可能存活，将其作为新特征。
 
 ## 特征工程
@@ -259,3 +267,6 @@ Name根据已经划分的类别进行one-hot编码
 最终保留特征： 
 
 Pclass,Fare,Age,Name,Sex,Embarked,FamilySize并且都转换为分类数据进行one-hot编码。
+
+## 模型运用
+采用GBDT，Kaggle上准确率为0.80382
