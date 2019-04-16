@@ -182,7 +182,7 @@ Cablin 数据有很多缺失值，删除该特征
 
 Embarked 共有三类，分别是S、C、Q,存活的情况有一定差别，C 港口的生存概率大一些，此特征保留。
 
-![7.png](https://i.loli.net/2019/04/15/5cb45b21e6943.png)
+![5.png](https://i.loli.net/2019/04/16/5cb5c1a0e01a1.png)
 
   
   
