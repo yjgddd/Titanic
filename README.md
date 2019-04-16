@@ -261,7 +261,7 @@ Pclass 为 1、2、3 类，Embarked有三类，分别为S、C、Q，均使用 on
 Sex，1 代表 male，0 代表 female,进行one-hot编码。
 
 
-Fare根据划分Fare<=2.5和Fare>2.5.进行one-hot编码。
+Fare划分为Fare<=2.5和Fare>2.5进行one-hot编码。
 
 Name根据已经划分的类别进行one-hot编码
 
@@ -270,4 +270,4 @@ Name根据已经划分的类别进行one-hot编码
 Pclass,Fare,Age,Name,Sex,Embarked,FamilySize并且都转换为分类数据进行one-hot编码。
 
 ## 模型运用
-采用GBDT，Kaggle上准确率为0.80382
+采用GBDT(梯度上升决策树)，Kaggle上准确率为0.80382
